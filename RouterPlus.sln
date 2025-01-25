@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouterPlus", "RouterPlus.csproj", "{070FC0C8-B58C-469C-AE48-31B0AF9AFACA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{070FC0C8-B58C-469C-AE48-31B0AF9AFACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{070FC0C8-B58C-469C-AE48-31B0AF9AFACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{070FC0C8-B58C-469C-AE48-31B0AF9AFACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{070FC0C8-B58C-469C-AE48-31B0AF9AFACA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
