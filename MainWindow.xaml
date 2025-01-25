@@ -3,10 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RouterPlus"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <DockPanel>
+        <!-- Sidebar -->
+        <StackPanel DockPanel.Dock="Left" Width="150" Background="LightGray">
+            <Button Content="Main" Command="{Binding ChangeViewCommand}" CommandParameter="Main" />
+            <Button Content="Login" Command="{Binding ChangeViewCommand}" CommandParameter="Login" />
+            <Button Content="SMS" Command="{Binding ChangeViewCommand}" CommandParameter="SMS" />
+            <Button Content="Automation Rules" Command="{Binding ChangeViewCommand}" CommandParameter="AutomationRules" />
+        </StackPanel>
 
-    </Grid>
+        <!-- Back Button -->
+        <Button Content="Back" DockPanel.Dock="Left" Width="100" Background="LightBlue"
+                Visibility="Collapsed" />
+
+        <!-- Content -->
+        <ContentControl Content="{Binding CurrentView}" />
+    </DockPanel>
 </Window>
