@@ -1,10 +1,45 @@
 <UserControl x:Class="RouterPlus.Views.LoginView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
-        <TextBlock Text="Login!" 
-                   FontSize="24" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" />
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:helpers="clr-namespace:RouterPlus.Helpers"
+             xmlns:local="clr-namespace:RouterPlus.Converters"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <UserControl.Resources>
+        <!-- Registering the Converter -->
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid Margin="20">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+            <!-- URL Field -->
+            <TextBox Margin="10"
+                     Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="Enter the URL (e.g., router.com)"
+                     VerticalAlignment="Center"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+            <!-- Password Field with Placeholder and Floating Hint -->
+            <PasswordBox Margin="10"
+                         Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}"
+                         PasswordChanged="PasswordBox_PasswordChanged"
+                         materialDesign:HintAssist.Hint="Password"
+                         VerticalAlignment="Center"
+                         IsEnabled="{Binding IsLoginEnabled}" />
+
+            <!-- Error Message -->
+            <TextBlock Text="{Binding ErrorMessage}"
+                       Foreground="Red"
+                       Visibility="{Binding IsErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                       Margin="10" />
+
+            <!-- Login Button -->
+            <Button Content="Login"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Width="200"
+                    Margin="10"
+                    Command="{Binding LoginCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}" />
+
+        </StackPanel>
     </Grid>
 </UserControl>

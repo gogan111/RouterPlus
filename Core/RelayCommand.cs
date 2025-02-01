@@ -25,8 +25,4 @@ public class RelayCommand : ICommand
 
     public event EventHandler CanExecuteChanged;
 
-    public void RaiseCanExecuteChanged()
-    {
-        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-    }
 }

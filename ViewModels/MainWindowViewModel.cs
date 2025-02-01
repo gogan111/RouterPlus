@@ -25,7 +25,7 @@ public class MainWindowViewModel : ViewModelBase
         ChangeViewCommand = new RelayCommand(ChangeView);
         BackCommand = new RelayCommand(GoBack);
         // Set the initial view
-        CurrentView = new SMSViewModel();
+        CurrentView = new LoginViewModel();
     }
     
     private void ChangeView(object newViews)
@@ -43,7 +43,7 @@ public class MainWindowViewModel : ViewModelBase
     
     private void GoBack(object parameter)
     {
-        CurrentView = new MainViewModel();
+        CurrentView = new LoginViewModel();
     }
 
 }

@@ -16,4 +16,9 @@
       </Page>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
+      <PackageReference Include="MaterialDesignThemes.MahApps" Version="5.2.1" />
+    </ItemGroup>
+
 </Project>
