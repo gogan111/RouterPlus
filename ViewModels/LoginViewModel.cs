@@ -1,14 +1,14 @@
-using System.Net.Http;
-using System.Text;
 using System.Windows.Input;
-using System.Threading.Tasks;
 using RouterPlus.Core;
 using RouterPlus.Helpers;
+using RouterPlus.Services;
 
 namespace RouterPlus.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
+        private readonly RouterService _routerService;
+
         private string _url;
         private string _password;
         private string _errorMessage;
@@ -62,6 +62,7 @@ namespace RouterPlus.ViewModels
 
         public LoginViewModel(MainWindowViewModel mainWindowViewModel)
         {
+            _routerService = new RouterService();
             _mainWindowViewModel = mainWindowViewModel;
             LoginCommand = new RelayCommand(Login);
         }
@@ -69,15 +70,16 @@ namespace RouterPlus.ViewModels
         private async void Login(object parameter)
         {
             bool isUrlValid = ValidationHelper.ValidateField(Url, "URL", ref _errorMessage, ref _isErrorVisible);
-            bool isPasswordValid = ValidationHelper.ValidateField(Password, "Password", ref _errorMessage, ref _isErrorVisible);
+            bool isPasswordValid =
+                ValidationHelper.ValidateField(Password, "Password", ref _errorMessage, ref _isErrorVisible);
 
             OnPropertyChanged(nameof(ErrorMessage));
             OnPropertyChanged(nameof(IsErrorVisible));
-            
+
             if (isUrlValid && isPasswordValid)
             {
                 NormalizeUrl();
-                bool isAuthenticated = await AuthenticateAsync(_normalizedUrl, Password);
+                bool isAuthenticated = await _routerService.AuthenticateAsync(_normalizedUrl, Password);
                 if (isAuthenticated)
                 {
                     _mainWindowViewModel.IsLoggedIn = true;
@@ -100,36 +102,6 @@ namespace RouterPlus.ViewModels
             else
             {
                 _normalizedUrl = Url;
-            }
-        }
-
-        private async Task<bool> AuthenticateAsync(string url, string password)
-        {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    string encodedPassword = Convert.ToBase64String(Encoding.UTF8.GetBytes(password));
-                    var formData = new FormUrlEncodedContent(new[]
-                    {
-                        new KeyValuePair<string, string>("isTest", "false"),
-                        new KeyValuePair<string, string>("goformId", "LOGIN"),
-                        new KeyValuePair<string, string>("password", encodedPassword)
-                    });
-
-                    string endpoint = $"{url}/goform/goform_set_cmd_process";
-                    var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint) { Content = formData };
-                    requestMessage.Headers.Add("Referer", $"{url}/index.html");
-
-                    var response = await client.SendAsync(requestMessage);
-                    return response.IsSuccessStatusCode && (await response.Content.ReadAsStringAsync()).Contains("\"result\":\"0\"");
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = "Error connecting to router.";
-                IsErrorVisible = true;
-                return false;
             }
         }
     }
