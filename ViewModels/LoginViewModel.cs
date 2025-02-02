@@ -14,6 +14,7 @@ namespace RouterPlus.ViewModels
         private string _errorMessage;
         private bool _isErrorVisible;
         private string _normalizedUrl;
+        private readonly MainWindowViewModel _mainWindowViewModel;
 
         public string Url
         {
@@ -59,8 +60,9 @@ namespace RouterPlus.ViewModels
 
         public ICommand LoginCommand { get; }
 
-        public LoginViewModel()
+        public LoginViewModel(MainWindowViewModel mainWindowViewModel)
         {
+            _mainWindowViewModel = mainWindowViewModel;
             LoginCommand = new RelayCommand(Login);
         }
 
@@ -78,8 +80,8 @@ namespace RouterPlus.ViewModels
                 bool isAuthenticated = await AuthenticateAsync(_normalizedUrl, Password);
                 if (isAuthenticated)
                 {
-                    ErrorMessage = string.Empty;
-                    IsErrorVisible = false;
+                    _mainWindowViewModel.IsLoggedIn = true;
+                    _mainWindowViewModel.CurrentView = new MainViewModel();
                 }
                 else
                 {

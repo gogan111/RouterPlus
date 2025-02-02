@@ -1,11 +1,24 @@
 using System.Windows.Input;
 using RouterPlus.Core;
+using RouterPlus.Views;
 
 namespace RouterPlus.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
+    private bool _isLoggedIn;
     private object _currentView;
+
+    public bool IsLoggedIn
+    {
+        get => _isLoggedIn;
+        set
+        {
+            _isLoggedIn = value;
+            OnPropertyChanged();
+            UpdateCurrentView();
+        }
+    }
 
     public object CurrentView
     {
@@ -16,18 +29,25 @@ public class MainWindowViewModel : ViewModelBase
             OnPropertyChanged();
         }
     }
-    
+
     public ICommand ChangeViewCommand { get; }
     public ICommand BackCommand { get; }
+    public ICommand LogoutCommand { get; }
 
     public MainWindowViewModel()
     {
+        CurrentView = new LoginViewModel(this);
         ChangeViewCommand = new RelayCommand(ChangeView);
-        BackCommand = new RelayCommand(GoBack);
-        // Set the initial view
-        CurrentView = new LoginViewModel();
+        LogoutCommand = new RelayCommand(Logout);
+        IsLoggedIn = false;
+        UpdateCurrentView();
     }
     
+    private void Logout(object parameter)
+    {
+        IsLoggedIn = false;
+    }
+
     private void ChangeView(object newViews)
     {
         var viewName = newViews.ToString();
@@ -36,14 +56,24 @@ public class MainWindowViewModel : ViewModelBase
             "Main" => new MainViewModel(),
             "SMS" => new SMSViewModel(),
             "AutomationRules" => new AutomationRulesViewModel(),
-            "Login" => new LoginViewModel(),
             _ => CurrentView
         };
     }
-    
-    private void GoBack(object parameter)
+
+    private void UpdateCurrentView()
     {
-        CurrentView = new LoginViewModel();
+        if (IsLoggedIn)
+        {
+            CurrentView = new MainView();
+        }
+        else
+        {
+            CurrentView = new LoginView(this);
+        }
     }
 
+    private void GoBack(object parameter)
+    {
+        CurrentView = this;
+    }
 }
