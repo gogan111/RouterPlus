@@ -6,13 +6,15 @@ namespace RouterPlus.Converters;
 
 public class BoolToVisibilityConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return (value is bool && (bool)value) ? Visibility.Visible : Visibility.Collapsed;
+        return value is true
+            ? Visibility.Visible
+            : Visibility.Collapsed;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return value is Visibility && (Visibility)value == Visibility.Visible;
+        return value is Visibility.Visible;
     }
 }

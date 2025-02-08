@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using RouterPlus.ViewModels;
 
 namespace RouterPlus.Views;
@@ -12,7 +11,11 @@ public partial class LoginView : UserControl
         InitializeComponent();
         this.DataContext = new LoginViewModel(mainWindowViewModel);
     }
-    
+
+    public LoginView()
+    {
+    }
+
     private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
     {
         if (DataContext is LoginViewModel viewModel)

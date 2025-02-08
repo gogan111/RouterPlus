@@ -13,7 +13,7 @@
         <!-- Sidebar -->
         <StackPanel DockPanel.Dock="Left" Width="150" Background="LightGray"
                     Visibility="{Binding IsLoggedIn, Converter={StaticResource BoolToVisibilityConverter}}">
-    
+
             <!-- Navigation Buttons -->
             <Button Content="Main" Command="{Binding ChangeViewCommand}" CommandParameter="Main" />
             <Button Content="SMS" Command="{Binding ChangeViewCommand}" CommandParameter="SMS" />
@@ -23,10 +23,9 @@
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Top">
                     <Button Content="Logout" Command="{Binding LogoutCommand}"
-                            Background="DarkRed" Foreground="White" Margin="10"/>
+                            Background="DarkRed" Foreground="White" Margin="10" />
                 </StackPanel>
             </DockPanel>
-
         </StackPanel>
 
         <!-- Back Button -->

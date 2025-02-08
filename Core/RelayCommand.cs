@@ -2,20 +2,14 @@ using System.Windows.Input;
 
 namespace RouterPlus.Core;
 
-public class RelayCommand : ICommand
+public class RelayCommand(Action<object> execute, Predicate<object>? canExecute = null)
+    : ICommand
 {
-    private readonly Action<object> _execute;
-    private readonly Predicate<object> _canExecute;
-
-    public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
-    {
-        _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-        _canExecute = canExecute;
-    }
+    private readonly Action<object> _execute = execute ?? throw new ArgumentNullException(nameof(execute));
 
     public bool CanExecute(object parameter)
     {
-        return _canExecute?.Invoke(parameter) ?? true;
+        return canExecute?.Invoke(parameter) ?? true;
     }
 
     public void Execute(object parameter)
@@ -23,6 +17,5 @@ public class RelayCommand : ICommand
         _execute(parameter);
     }
 
-    public event EventHandler CanExecuteChanged;
-
+    public event EventHandler? CanExecuteChanged;
 }

@@ -6,7 +6,6 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <!-- Material Design Resource Dictionaries -->
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
@@ -26,7 +25,6 @@
             <DataTemplate DataType="{x:Type vm:LoginViewModel}">
                 <views:LoginView />
             </DataTemplate>
-            
                     
             <Style TargetType="TextBox" x:Key="MyCustomTextBox">
                 <Setter Property="FontSize" Value="16"/>
@@ -34,6 +32,5 @@
                 <Setter Property="materialDesign:HintAssist.HelperText" Value="Helper text here"/>
             </Style>
         </ResourceDictionary>
-
     </Application.Resources>
 </Application>
