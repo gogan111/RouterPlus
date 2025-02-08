@@ -13,7 +13,6 @@ namespace RouterPlus.ViewModels
         private string _password;
         private string _errorMessage;
         private bool _isErrorVisible;
-        private string _normalizedUrl;
         private readonly MainWindowViewModel _mainWindowViewModel;
 
         public string Url
@@ -78,8 +77,7 @@ namespace RouterPlus.ViewModels
 
             if (isUrlValid && isPasswordValid)
             {
-                NormalizeUrl();
-                bool isAuthenticated = await _routerService.AuthenticateAsync(_normalizedUrl, Password);
+                bool isAuthenticated = await _routerService.AuthenticateAsync(Url, Password);
                 if (isAuthenticated)
                 {
                     _mainWindowViewModel.IsLoggedIn = true;
@@ -90,18 +88,6 @@ namespace RouterPlus.ViewModels
                     ErrorMessage = "Invalid credentials.";
                     IsErrorVisible = true;
                 }
-            }
-        }
-
-        private void NormalizeUrl()
-        {
-            if (!Url.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
-            {
-                _normalizedUrl = $"http://{Url}";
-            }
-            else
-            {
-                _normalizedUrl = Url;
             }
         }
     }

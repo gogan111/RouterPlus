@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using RouterPlus.Core;
+using RouterPlus.Services;
 using RouterPlus.Views;
 
 namespace RouterPlus.ViewModels;
@@ -8,6 +9,7 @@ public class MainWindowViewModel : ViewModelBase
 {
     private bool _isLoggedIn;
     private object _currentView;
+    private readonly RouterService _routerService;
 
     public bool IsLoggedIn
     {
@@ -39,13 +41,15 @@ public class MainWindowViewModel : ViewModelBase
         CurrentView = new LoginViewModel(this);
         ChangeViewCommand = new RelayCommand(ChangeView);
         LogoutCommand = new RelayCommand(Logout);
+        _routerService = new RouterService();
         IsLoggedIn = false;
         UpdateCurrentView();
     }
-    
+
     private void Logout(object parameter)
     {
         IsLoggedIn = false;
+        _routerService.Logout();
     }
 
     private void ChangeView(object newViews)
