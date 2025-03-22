@@ -1,7 +1,5 @@
-using System.Text.Json;
 using System.Windows.Input;
 using RouterPlus.Core;
-using RouterPlus.Dtos.Responses;
 using RouterPlus.Helpers;
 using RouterPlus.Services;
 
@@ -11,8 +9,8 @@ public class LoginViewModel : ViewModelBase
 {
     private readonly RouterService _routerService;
 
-    private string _url="192.168.0.1";
-    private string _password="my_pass_1111";
+    private string _url;
+    private string _password;
     private string _errorMessage;
     private bool _isErrorVisible;
     private readonly MainWindowViewModel _mainWindowViewModel;
