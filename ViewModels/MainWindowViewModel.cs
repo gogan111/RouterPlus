@@ -38,10 +38,10 @@ public class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        CurrentView = new LoginViewModel(this);
+        _routerService = new RouterService();
+        CurrentView = new LoginViewModel(this, _routerService);
         ChangeViewCommand = new RelayCommand(ChangeView);
         LogoutCommand = new RelayCommand(Logout);
-        _routerService = new RouterService();
         IsLoggedIn = false;
         UpdateCurrentView();
     }
@@ -58,7 +58,7 @@ public class MainWindowViewModel : ViewModelBase
         CurrentView = viewName switch
         {
             "Main" => new MainViewModel(),
-            "SMS" => new SMSViewModel(),
+            "SMS" => new SmsViewModel(_routerService),
             "AutomationRules" => new AutomationRulesViewModel(),
             _ => CurrentView
         };
@@ -72,7 +72,7 @@ public class MainWindowViewModel : ViewModelBase
         }
         else
         {
-            CurrentView = new LoginView(this);
+            CurrentView = new LoginView(this, _routerService);
         }
     }
 

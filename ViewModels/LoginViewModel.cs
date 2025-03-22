@@ -1,5 +1,7 @@
+using System.Text.Json;
 using System.Windows.Input;
 using RouterPlus.Core;
+using RouterPlus.Dtos.Responses;
 using RouterPlus.Helpers;
 using RouterPlus.Services;
 
@@ -9,8 +11,8 @@ public class LoginViewModel : ViewModelBase
 {
     private readonly RouterService _routerService;
 
-    private string _url;
-    private string _password;
+    private string _url="192.168.0.1";
+    private string _password="my_pass_1111";
     private string _errorMessage;
     private bool _isErrorVisible;
     private readonly MainWindowViewModel _mainWindowViewModel;
@@ -59,9 +61,9 @@ public class LoginViewModel : ViewModelBase
 
     public ICommand LoginCommand { get; }
 
-    public LoginViewModel(MainWindowViewModel mainWindowViewModel)
+    public LoginViewModel(MainWindowViewModel mainWindowViewModel, RouterService routerService)
     {
-        _routerService = new RouterService();
+        _routerService = routerService;
         _mainWindowViewModel = mainWindowViewModel;
         LoginCommand = new RelayCommand(Login);
     }

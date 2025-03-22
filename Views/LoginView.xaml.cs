@@ -1,15 +1,16 @@
 using System.Windows;
 using System.Windows.Controls;
+using RouterPlus.Services;
 using RouterPlus.ViewModels;
 
 namespace RouterPlus.Views;
 
 public partial class LoginView : UserControl
 {
-    public LoginView(MainWindowViewModel mainWindowViewModel)
+    public LoginView(MainWindowViewModel mainWindowViewModel, RouterService routerService)
     {
         InitializeComponent();
-        this.DataContext = new LoginViewModel(mainWindowViewModel);
+        this.DataContext = new LoginViewModel(mainWindowViewModel, routerService);
     }
 
     public LoginView()

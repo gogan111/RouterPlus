@@ -16,7 +16,7 @@ public static class RouterApiFactory
         {
             BaseAddress = new Uri(baseUrl)
         };
-
-        return RestService.For<IRouterApi>(httpClient);
+        var settings = new RefitSettings(new NewtonsoftJsonContentSerializer());
+        return RestService.For<IRouterApi>(httpClient, settings);
     }
 }

@@ -16,7 +16,7 @@
             <DataTemplate DataType="{x:Type vm:MainViewModel}">
                 <views:MainView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:SMSViewModel}">
+            <DataTemplate DataType="{x:Type vm:SmsViewModel}">
                 <views:SMSView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:AutomationRulesViewModel}">

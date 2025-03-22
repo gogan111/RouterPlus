@@ -2,9 +2,56 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
-        <TextBlock Text="SMS" 
-                   FontSize="24" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>  <!-- Left: List of SMS numbers -->
+            <ColumnDefinition Width="*"/>    <!-- Right: SMS conversation -->
+        </Grid.ColumnDefinitions>
+
+        <!-- 📌 SMS Number List (Left Panel) -->
+        <ListBox Grid.Column="0" ItemsSource="{Binding SmsThreads}" 
+                 SelectedItem="{Binding SelectedThread, Mode=TwoWay}"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock Text="{Binding Number}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding PreviewMessage}" Foreground="Gray"
+                                   TextTrimming="CharacterEllipsis" MaxWidth="230"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- 📌 SMS Conversation (Right Panel) -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>   <!-- Number (Header) -->
+                <RowDefinition Height="*"/>      <!-- Messages (Scrollable) -->
+            </Grid.RowDefinitions>
+
+            <!-- 🔹 Selected Number (Header) -->
+            <TextBlock Text="{Binding SelectedThread.Number}" 
+                       FontSize="18" FontWeight="Bold" 
+                       Margin="5" />
+
+            <!-- 🔹 Scrollable Messages List -->
+            <ListBox Grid.Row="1" ItemsSource="{Binding SelectedThread.Messages}"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="5">
+                            <!-- ✨ Selectable Text -->
+                            <TextBlock Text="{Binding Content}" TextWrapping="Wrap"
+                                       TextElement.FontSize="14"
+                                       TextElement.Foreground="Black"
+                                       />
+                            <TextBlock Text="{Binding Date, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" 
+                                       FontSize="12" 
+                                       Foreground="Gray"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
     </Grid>
 </UserControl>
