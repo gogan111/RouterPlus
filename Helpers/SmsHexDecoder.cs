@@ -4,13 +4,18 @@ namespace RouterPlus.Converters;
 
 public static class SmsHexDecoder
 {
+    public static string EncodeSmsHex(string text)
+    {
+        byte[] bytes = Encoding.BigEndianUnicode.GetBytes(text);
+        return BitConverter.ToString(bytes).Replace("-", "");
+    }
+
     public static string DecodeSmsHex(string hex)
     {
         byte[] bytes = ConvertHexStringToByteArray(hex);
-        
+
         return Encoding.BigEndianUnicode.GetString(bytes);
     }
-    
 
     private static byte[] ConvertHexStringToByteArray(string hex)
     {

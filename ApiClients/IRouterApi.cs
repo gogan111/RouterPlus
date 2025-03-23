@@ -10,9 +10,14 @@ public interface IRouterApi
     private const string GOFORM_SET_CMS_PROCESS = "/goform/goform_set_cmd_process";
 
     [Post(GOFORM_SET_CMS_PROCESS)]
-    Task<ApiResponse<LoginResponse>> LoginAsync(
-        [Body(BodySerializationMethod.UrlEncoded)] Dictionary<string, string> request);
+    Task<ApiResponse<OperationResponse>> LoginAsync(
+        [Body(BodySerializationMethod.UrlEncoded)]
+        Dictionary<string, string> request);
 
     [Get(GOFORM_GET_CMS_PROCESS)]
-    Task<ApiResponse<AllSmsMessagesResponse>> GetAllSmsMessages([Query] GetAllSmsMessagesRequest request); 
+    Task<ApiResponse<AllSmsMessagesResponse>> GetAllSmsMessages([Query] GetAllSmsMessagesRequest request);
+
+    [Post(GOFORM_SET_CMS_PROCESS)]
+    Task<ApiResponse<OperationResponse>> SendMessage(
+        [Body(BodySerializationMethod.UrlEncoded)] Dictionary<string, string> request);
 }

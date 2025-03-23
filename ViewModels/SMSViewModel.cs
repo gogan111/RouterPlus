@@ -10,6 +10,18 @@ public class SmsViewModel : ViewModelBase
 {
     private readonly RouterService _routerService;
 
+    private string _newSmsMessage;
+
+    public string NewSmsMessage
+    {
+        get => _newSmsMessage;
+        set
+        {
+            _newSmsMessage = value;
+            OnPropertyChanged();
+        }
+    }
+
     public ObservableCollection<SmsThread> SmsThreads { get; } = [];
     private SmsThread? _selectedThread;
 
@@ -25,13 +37,15 @@ public class SmsViewModel : ViewModelBase
     }
 
     public ICommand LoadMessagesCommand { get; }
+    public ICommand SendMessageCommand { get; }
 
     public SmsViewModel(RouterService routerService)
     {
         _routerService = routerService;
         LoadMessagesCommand = new AsyncRelayCommand(async () => await LoadSmsListAsync());
+        SendMessageCommand = new RelayCommand(SendMessage);
     }
-    
+
     public async Task LoadSmsListAsync()
     {
         var smsList = await _routerService.getAllSmsMessages();
@@ -60,6 +74,17 @@ public class SmsViewModel : ViewModelBase
                 SelectedThread.Messages.OrderBy(m => m.Date).ToList()
             );
             OnPropertyChanged(nameof(SelectedThread.Messages));
+        }
+    }
+
+    private async void SendMessage(object parameter)
+    {
+        if (string.IsNullOrWhiteSpace(NewSmsMessage)) return;
+        if (SelectedThread == null) return;
+
+        if (await _routerService.sendMessage(NewSmsMessage, SelectedThread.Number))
+        {
+            NewSmsMessage = "";
         }
     }
 }

@@ -5,7 +5,7 @@ using RouterPlus.ViewModels;
 
 namespace RouterPlus.Views;
 
-public partial class LoginView : UserControl
+public partial class LoginView
 {
     public LoginView(MainWindowViewModel mainWindowViewModel, RouterService routerService)
     {

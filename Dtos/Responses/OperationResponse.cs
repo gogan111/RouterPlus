@@ -1,6 +1,6 @@
 namespace RouterPlus.Dtos.Responses;
 
-public class LoginResponse
+public class OperationResponse
 {
     public string? Result { get; set; }
 
