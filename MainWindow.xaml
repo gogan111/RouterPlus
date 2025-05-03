@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:RouterPlus.Converters"
+        xmlns:core="clr-namespace:RouterPlus.Core"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
@@ -15,9 +16,12 @@
                     Visibility="{Binding IsLoggedIn, Converter={StaticResource BoolToVisibilityConverter}}">
 
             <!-- Navigation Buttons -->
-            <Button Content="Main" Command="{Binding ChangeViewCommand}" CommandParameter="Main" />
-            <Button Content="SMS" Command="{Binding ChangeViewCommand}" CommandParameter="SMS" />
-            <Button Content="Automation Rules" Command="{Binding ChangeViewCommand}" CommandParameter="AutomationRules" />
+            <Button Content="Main" Command="{Binding ChangeViewCommand}"
+                    CommandParameter="{x:Static core:ViewType.MAIN}" />
+            <Button Content="SMS" Command="{Binding ChangeViewCommand}"
+                    CommandParameter="{x:Static core:ViewType.SMS}" />
+            <Button Content="Automation Rules" Command="{Binding ChangeViewCommand}"
+                    CommandParameter="{x:Static core:ViewType.AutomationRules}" />
 
             <!-- Spacer to push the logout button down -->
             <DockPanel LastChildFill="True">

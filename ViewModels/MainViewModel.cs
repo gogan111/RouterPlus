@@ -1,6 +1,8 @@
+using RouterPlus.Core;
+
 namespace RouterPlus.ViewModels;
 
-public class MainViewModel
+public class MainViewModel : ViewModelBase
 {
     public MainViewModel()
     {

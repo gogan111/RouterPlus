@@ -12,6 +12,8 @@ public class OperationResponse
             {
                 case "0":
                     return ResponseStatus.SUCCESS;
+                case "success":
+                    return ResponseStatus.SUCCESS;
                 default:
                     return ResponseStatus.FAIL;
             }

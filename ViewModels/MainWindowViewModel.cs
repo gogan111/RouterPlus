@@ -10,6 +10,7 @@ public class MainWindowViewModel : ViewModelBase
     private bool _isLoggedIn;
     private object _currentView;
     private readonly RouterService _routerService;
+    private Dictionary<ViewType, ViewModelBase> viewModels;
 
     public bool IsLoggedIn
     {
@@ -33,7 +34,6 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     public ICommand ChangeViewCommand { get; }
-    public ICommand BackCommand { get; }
     public ICommand LogoutCommand { get; }
 
     public MainWindowViewModel()
@@ -44,6 +44,7 @@ public class MainWindowViewModel : ViewModelBase
         LogoutCommand = new RelayCommand(Logout);
         IsLoggedIn = false;
         UpdateCurrentView();
+        InitializeViews();
     }
 
     private void Logout(object parameter)
@@ -52,15 +53,19 @@ public class MainWindowViewModel : ViewModelBase
         _routerService.Logout();
     }
 
-    private void ChangeView(object newViews)
+    private void ChangeView(object newViewsType)
     {
-        var viewName = newViews.ToString();
-        CurrentView = viewName switch
-        {
-            "Main" => new MainViewModel(),
-            "SMS" => new SmsViewModel(_routerService),
-            "AutomationRules" => new AutomationRulesViewModel(),
-            _ => CurrentView
+        CurrentView = viewModels.TryGetValue((ViewType)newViewsType, out var result) ?
+            result :
+            CurrentView;
+    }
+
+    private void InitializeViews()
+    {
+        viewModels = new Dictionary<ViewType, ViewModelBase>{
+            { ViewType.MAIN, new MainViewModel()},
+            { ViewType.SMS, new SmsViewModel(_routerService)},
+            { ViewType.AutomationRules, new AutomationRulesViewModel()}
         };
     }
 
@@ -74,10 +79,5 @@ public class MainWindowViewModel : ViewModelBase
         {
             CurrentView = new LoginView(this, _routerService);
         }
-    }
-
-    private void GoBack(object parameter)
-    {
-        CurrentView = this;
     }
 }

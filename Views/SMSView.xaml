@@ -2,26 +2,37 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250" />  <!-- Left: List of SMS numbers -->
             <ColumnDefinition Width="*" />    <!-- Right: SMS conversation -->
         </Grid.ColumnDefinitions>
-
-        <!-- 📌 SMS Number List (Left Panel) -->
-        <ListBox Grid.Column="0" ItemsSource="{Binding SmsThreads}"
-                 SelectedItem="{Binding SelectedThread, Mode=TwoWay}"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="5">
-                        <TextBlock Text="{Binding Number}" FontWeight="Bold" />
-                        <TextBlock Text="{Binding PreviewMessage}" Foreground="Gray"
-                                   TextTrimming="CharacterEllipsis" MaxWidth="230" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <DockPanel Grid.Column="0">
+            <Button 
+                Content="RELOAD"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Padding="10,5"
+                Margin="5"
+                Command="{Binding LoadMessagesCommand}"
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                DockPanel.Dock="Top" />
+        
+            <ListBox ItemsSource="{Binding SmsThreads}"
+                     SelectedItem="{Binding SelectedThread, Mode=TwoWay}"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="{Binding Number}" FontWeight="Bold" />
+                            <TextBlock Text="{Binding PreviewMessage}" Foreground="Gray"
+                                       TextTrimming="CharacterEllipsis" MaxWidth="230" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
 
         <!-- 📌 SMS Conversation (Right Panel) -->
         <Grid Grid.Column="1">
