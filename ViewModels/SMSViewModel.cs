@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using System.Windows;
+using System.Collections.Specialized;
 using System.Windows.Input;
 using RouterPlus.Core;
 using RouterPlus.Models;
@@ -12,7 +12,8 @@ public class SmsViewModel : ViewModelBase
 {
     private readonly RouterService _routerService;
     private readonly Timer _smsReloadTimer;
-    
+    private readonly GlobalContext _context;
+
     private string _newSmsMessage;
 
     public string NewSmsMessage
@@ -25,7 +26,7 @@ public class SmsViewModel : ViewModelBase
         }
     }
 
-    public ObservableCollection<SmsThread> SmsThreads { get; } = [];
+    public ObservableCollection<SmsThread> SmsThreads => _context.SmsThreads;
     private SmsThread? _selectedThread;
 
     public SmsThread? SelectedThread
@@ -33,73 +34,30 @@ public class SmsViewModel : ViewModelBase
         get => _selectedThread;
         set
         {
-            _selectedThread = value;
-            OnPropertyChanged();
-            LoadSmsThreadAsync();
+            if (value != null)
+            {
+                _selectedThread = value;
+                OnPropertyChanged();
+            }
         }
     }
 
-    //todo replace ICommand with CommunityToolkit.Mvvm ICommand 
     public ICommand LoadMessagesCommand { get; }
     public ICommand SendMessageCommand { get; }
 
-    public SmsViewModel(RouterService routerService)
+    public SmsViewModel(GlobalContext context, RouterService routerService)
     {
+        _context = context;
         _routerService = routerService;
-        LoadMessagesCommand = new AsyncRelayCommand(async () => await LoadSmsListAsync());
+        _context.SmsThreadsReloaded += OnSmsThreadsReloaded;
+        LoadMessagesCommand = new AsyncRelayCommand(async () => await _context.RefreshMessagesAsync());
         SendMessageCommand = new AsyncRelayCommand(async () => await SendMessage());
-        
+
+        //todo delete it 
         _smsReloadTimer = new Timer(60000);
-        _smsReloadTimer.Elapsed += async (s, e) => await LoadSmsListAsync();
+        _smsReloadTimer.Elapsed += async (s, e) => await _context.RefreshMessagesAsync();
         _smsReloadTimer.AutoReset = true;
         _smsReloadTimer.Start();
-    }
-
-    public async Task LoadSmsListAsync()
-    {
-        Console.Write("Loading sms list...");
-        var smsList = await _routerService.getAllSmsMessages();
-
-        var groupedMessages = smsList
-            .GroupBy(sms => sms.Number)
-            .Select(group => new SmsThread
-            {
-                Number = group.Key,
-                Messages = group.OrderBy(m => m.Date ?? DateTime.MinValue).ToList(),
-            })
-            .ToList();
-
-         OverrideSmsThreads(groupedMessages);
-         Console.Write("SMS list loaded.");
-    }
-
-    private void OverrideSmsThreads(List<SmsThread> groupedMessages)
-    {
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            var currentThreadNumber = SelectedThread?.Number;
-            SmsThreads.Clear();
-
-            foreach (var thread in groupedMessages)
-            {
-                if (thread.Number == currentThreadNumber)
-                {
-                    SelectedThread = thread;
-                }
-                SmsThreads.Add(thread);
-            }
-        });
-    }
-
-    private async Task LoadSmsThreadAsync()
-    {
-        if (SelectedThread != null)
-        {
-            SelectedThread.Messages = await Task.FromResult(
-                SelectedThread.Messages.OrderBy(m => m.Date).ToList()
-            );
-            OnPropertyChanged(nameof(SelectedThread.Messages));
-        }
     }
 
     private async Task SendMessage()
@@ -112,15 +70,26 @@ public class SmsViewModel : ViewModelBase
             NewSmsMessage = "";
             //message appears in router not immediately and require some delay before reading
             await Task.Delay(1000);
-            await LoadSmsListAsync();
+            await _context.RefreshMessagesAsync();
         }
-        
+
         Console.Write("Message sent.");
     }
     
-    public void Dispose()
+    private void OnSmsThreadsReloaded()
     {
-        _smsReloadTimer?.Stop();
-        _smsReloadTimer?.Dispose();
+        TryRestoreSelectedThread();
+    }
+    
+    private void TryRestoreSelectedThread()
+    {
+        if (_selectedThread == null)
+        {
+            return;
+        }
+
+        var previousNumber = _selectedThread.Number;
+    
+        SelectedThread = _context.SmsThreads.FirstOrDefault(t => t.Number == previousNumber);
     }
 }

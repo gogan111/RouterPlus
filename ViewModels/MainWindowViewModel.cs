@@ -11,7 +11,8 @@ public class MainWindowViewModel : ViewModelBase
     private object _currentView;
     private readonly RouterService _routerService;
     private Dictionary<ViewType, ViewModelBase> viewModels;
-
+    public static GlobalContext Context { get; private set; }
+    
     public bool IsLoggedIn
     {
         get => _isLoggedIn;
@@ -42,9 +43,10 @@ public class MainWindowViewModel : ViewModelBase
         CurrentView = new LoginViewModel(this, _routerService);
         ChangeViewCommand = new RelayCommand(ChangeView);
         LogoutCommand = new RelayCommand(Logout);
+        Context = new GlobalContext(_routerService);
         IsLoggedIn = false;
+        InitializeViews(Context, _routerService);
         UpdateCurrentView();
-        InitializeViews();
     }
 
     private void Logout(object parameter)
@@ -60,12 +62,12 @@ public class MainWindowViewModel : ViewModelBase
             CurrentView;
     }
 
-    private void InitializeViews()
+    private void InitializeViews(GlobalContext context, RouterService routerService)
     {
         viewModels = new Dictionary<ViewType, ViewModelBase>{
             { ViewType.MAIN, new MainViewModel()},
-            { ViewType.SMS, new SmsViewModel(_routerService)},
-            { ViewType.AutomationRules, new AutomationRulesViewModel()}
+            { ViewType.SMS, new SmsViewModel(context, routerService)},
+            { ViewType.AutomationRules, new AutomationRulesViewModel(context)}
         };
     }
 
