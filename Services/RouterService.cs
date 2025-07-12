@@ -6,12 +6,24 @@ using RouterPlus.Dtos.Requests;
 using RouterPlus.Dtos.Responses;
 using RouterPlus.Models;
 using static System.Text.RegularExpressions.Regex;
+using Timer = System.Timers.Timer;
 
 namespace RouterPlus.Services;
 
 public class RouterService
 {
     private IRouterApi? _routerApi;
+    private Dictionary<string, string>? _loginRequest;
+    private readonly Timer _reloginTimer;
+
+    public RouterService()
+    {
+        //todo delete it and replace with recovery wrapping
+        _reloginTimer = new Timer(300000);
+        _reloginTimer.Elapsed += async (s, e) => await Relogin();
+        _reloginTimer.AutoReset = true;
+        _reloginTimer.Start();
+    }
 
     public async Task<bool> AuthenticateAsync(string url, string password)
     {
@@ -24,11 +36,30 @@ public class RouterService
         if (response is { IsSuccessStatusCode: true, Content.Status: OperationResponse.ResponseStatus.SUCCESS })
         {
             _routerApi = routerApi;
+            _loginRequest = request;
             return true;
         }
 
         Console.WriteLine($"Authentication failed: {response.Content}");
         return false;
+    }
+    
+    private async Task Relogin()
+    {
+        Console.WriteLine("Try to relogin.");
+
+        if (_routerApi == null && _loginRequest == null)
+        {
+            Console.WriteLine("Cannot relogin.");
+            return;
+        }
+
+        var response = await _routerApi.LoginAsync(_loginRequest);
+
+        if (response is { IsSuccessStatusCode: true, Content.Status: OperationResponse.ResponseStatus.SUCCESS })
+        {
+            Console.WriteLine("Successful relogin.");
+        }
     }
 
     public void Logout()

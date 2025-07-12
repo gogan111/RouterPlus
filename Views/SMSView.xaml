@@ -9,7 +9,7 @@
             <ColumnDefinition Width="*" />    <!-- Right: SMS conversation -->
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Column="0">
-            <Button 
+            <Button
                 Content="RELOAD"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Right"
@@ -18,7 +18,7 @@
                 Command="{Binding LoadMessagesCommand}"
                 Style="{StaticResource MaterialDesignRaisedButton}"
                 DockPanel.Dock="Top" />
-        
+
             <ListBox ItemsSource="{Binding SmsThreads}"
                      SelectedItem="{Binding SelectedThread, Mode=TwoWay}"
                      ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -54,10 +54,16 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="5">
-                            <!-- ✨ Selectable Text -->
-                            <TextBlock Text="{Binding Content}" TextWrapping="Wrap"
-                                       TextElement.FontSize="14"
-                                       TextElement.Foreground="Black" />
+                            <!-- Selectable TextBox for message content -->
+                            <TextBox Text="{Binding Content}"
+                                     TextWrapping="Wrap"
+                                     FontSize="14"
+                                     Foreground="Black"
+                                     IsReadOnly="True"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     Cursor="IBeam" />
+
                             <TextBlock Text="{Binding Date, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"
                                        FontSize="12"
                                        Foreground="Gray" />

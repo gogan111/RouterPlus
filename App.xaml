@@ -8,10 +8,14 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Secondary/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Secondary/MaterialDesignColor.Lime.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate DataType="{x:Type vm:MainViewModel}">
                 <views:MainView />
@@ -19,17 +23,16 @@
             <DataTemplate DataType="{x:Type vm:SmsViewModel}">
                 <views:SMSView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type vm:AutomationRulesViewModel}">
-                <views:AutomationRulesView />
+            <DataTemplate DataType="{x:Type vm:AutomationTasksViewModel}">
+                <views:AutomationTasksView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:LoginViewModel}">
                 <views:LoginView />
             </DataTemplate>
-                    
             <Style TargetType="TextBox" x:Key="MyCustomTextBox">
-                <Setter Property="FontSize" Value="16"/>
-                <Setter Property="materialDesign:HintAssist.Hint" Value="Your Hint Here"/>
-                <Setter Property="materialDesign:HintAssist.HelperText" Value="Helper text here"/>
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="materialDesign:HintAssist.Hint" Value="Your Hint Here" />
+                <Setter Property="materialDesign:HintAssist.HelperText" Value="Helper text here" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

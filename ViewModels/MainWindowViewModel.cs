@@ -12,7 +12,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly RouterService _routerService;
     private Dictionary<ViewType, ViewModelBase> viewModels;
     public static GlobalContext Context { get; private set; }
-    
+
     public bool IsLoggedIn
     {
         get => _isLoggedIn;
@@ -57,17 +57,16 @@ public class MainWindowViewModel : ViewModelBase
 
     private void ChangeView(object newViewsType)
     {
-        CurrentView = viewModels.TryGetValue((ViewType)newViewsType, out var result) ?
-            result :
-            CurrentView;
+        CurrentView = viewModels.TryGetValue((ViewType)newViewsType, out var result) ? result : CurrentView;
     }
 
     private void InitializeViews(GlobalContext context, RouterService routerService)
     {
-        viewModels = new Dictionary<ViewType, ViewModelBase>{
-            { ViewType.MAIN, new MainViewModel()},
-            { ViewType.SMS, new SmsViewModel(context, routerService)},
-            { ViewType.AutomationRules, new AutomationRulesViewModel(context)}
+        viewModels = new Dictionary<ViewType, ViewModelBase>
+        {
+            { ViewType.MAIN, new MainViewModel() },
+            { ViewType.SMS, new SmsViewModel(context, routerService) },
+            { ViewType.AutomationRules, new AutomationTasksViewModel(context, routerService) }
         };
     }
 
