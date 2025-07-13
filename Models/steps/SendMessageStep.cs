@@ -7,7 +7,7 @@ public class SendMessageStep : Step
 {
     public RouterService RouterService { get; set; }
 
-    public SendMessageStep() : base("", "")
+    public SendMessageStep() : base(null, null)
     {
     }
 
@@ -24,6 +24,10 @@ public class SendMessageStep : Step
 
     public override bool Execute()
     {
+        if (string.IsNullOrEmpty(Number) && string.IsNullOrEmpty(Message))
+        {
+            return false;
+        }
         return RouterService.sendMessage(Message, Number).GetAwaiter().GetResult();
     }
 }
