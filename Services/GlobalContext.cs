@@ -34,7 +34,7 @@ public class GlobalContext : INotifyPropertyChanged
 
     public async Task RefreshMessagesAsync()
     { 
-        Console.Write("Loading sms list...");
+        Console.WriteLine("Loading sms list...");
         var smsList = await _routerService.getAllSmsMessages();
 
         var groupedMessages = smsList
@@ -47,7 +47,7 @@ public class GlobalContext : INotifyPropertyChanged
             .ToList();
 
         OverrideSmsThreads(groupedMessages);
-        Console.Write("SMS list loaded.");
+        Console.WriteLine("SMS list loaded.");
     }
     
     private void OverrideSmsThreads(List<SmsThread> groupedMessages)

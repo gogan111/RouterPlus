@@ -74,8 +74,6 @@ public class AutomationTasksViewModel : ViewModelBase
         if (element is Step step)
         {
             step.IsExpanded = !step.IsExpanded;
-            Console.WriteLine($"Editing step: {step.IsExpanded}");
-
             SelectedStep = SelectedStep == step ? null : step;
         }
     }

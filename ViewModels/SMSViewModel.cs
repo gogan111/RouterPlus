@@ -53,7 +53,7 @@ public class SmsViewModel : ViewModelBase
         SendMessageCommand = new AsyncRelayCommand(async () => await SendMessage());
 
         //todo delete it 
-        _smsReloadTimer = new Timer(60000);
+        _smsReloadTimer = new Timer(10000);
         _smsReloadTimer.Elapsed += async (s, e) => await _context.RefreshMessagesAsync();
         _smsReloadTimer.AutoReset = true;
         _smsReloadTimer.Start();

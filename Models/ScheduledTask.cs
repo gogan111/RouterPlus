@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using NCrontab;
+using Timer = System.Timers.Timer;
 
 namespace RouterPlus.Models;
 
@@ -20,21 +20,12 @@ public class ScheduledTask : IDisposable, INotifyPropertyChanged
     }
 
     public ObservableCollection<Step> Steps { get; } = new();
-    private readonly CrontabSchedule _schedule;
-    private Timer _timer;
+    private Timer _timer = new Timer();
     private DateTime _nextRun;
 
     public ScheduledTask()
     {
-
-    }
-    
-    public ScheduledTask(string name, List<Step> steps, string cronExpression)
-    {
-        Name = name;
-        
-        Steps = new ObservableCollection<Step>(steps);
-        _schedule = CrontabSchedule.Parse(cronExpression);
+        Start();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -44,7 +35,11 @@ public class ScheduledTask : IDisposable, INotifyPropertyChanged
 
     public void Start()
     {
-        ScheduleNextRun();
+        //todo delete it 
+        _timer = new Timer(20000);
+        _timer.Elapsed += async (s, e) => Run();
+        _timer.AutoReset = true;
+        _timer.Start();
     }
 
     public void RemoveStep(Step step)
@@ -52,30 +47,24 @@ public class ScheduledTask : IDisposable, INotifyPropertyChanged
         bool remove = Steps.Remove(step);
         if (remove)
         {
-            Console.WriteLine($"Step '{step.Name}' removed." );
+            Console.WriteLine($"Step '{step.Name}' removed.");
         }
-    }
-
-    private void ScheduleNextRun()
-    {
-        _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
-        var delay = _nextRun - DateTime.Now;
-
-        _timer = new Timer(_ => Run(), null, delay, Timeout.InfiniteTimeSpan);
     }
 
     private void Run()
     {
         foreach (var step in Steps)
         {
-            var completed = step.Execute();
+            var isSuccess = step.Execute();
 
-            if (!completed)
+            if (!isSuccess)
             {
-                Console.WriteLine($"Step: {step}, return status false.");
-                break;
+                Console.WriteLine($"Step: '{step.Name}', return status false.");
+                return;
             }
         }
+
+        Console.WriteLine($"Task: {Name}, was successfully finished.");
     }
 
     public void Dispose()
