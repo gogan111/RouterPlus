@@ -1,11 +1,22 @@
-using RouterPlus.Core;
 using RouterPlus.Services;
 using static RouterPlus.Models.steps.StepType;
 
 namespace RouterPlus.Models.steps;
 
-public class FindMessageStep(GlobalContext context, string message, string number) : Step(message, number)
+public class FindMessageStep : Step
 {
+    public GlobalContext Context { get; set; }
+
+    public FindMessageStep() : base("", "")
+    {
+    }
+
+    public FindMessageStep(GlobalContext context, string message, string number)
+        : base(message, number)
+    {
+        Context = context;
+    }
+
     public override StepType StepType()
     {
         return FindMessage;
@@ -13,14 +24,14 @@ public class FindMessageStep(GlobalContext context, string message, string numbe
 
     public override bool Execute()
     {
-        foreach (var smsThread in context.SmsThreads)
+        foreach (var smsThread in Context.SmsThreads)
         {
-            if (number != null && number != smsThread.Number)
+            if (Number != null && Number != smsThread.Number)
             {
                 continue;
             }
 
-            if (message != null && message == smsThread.LastMessage?.Content)
+            if (Message != null && Message == smsThread.LastMessage?.Content)
             {
                 return true;
             }

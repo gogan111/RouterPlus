@@ -152,10 +152,20 @@
                         Margin="10,0,0,0"
                         Command="{Binding AddStepCommand}" />
             </StackPanel>
-            <Button Grid.Row="3" Content="Delete Task"
-                    Margin="5,0,0,0"
-                    Command="{Binding DeleteTaskCommand}"
-                    CommandParameter="{Binding}" />
+            <Grid Grid.Row="3" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />   <!-- Left side -->
+                    <ColumnDefinition Width="Auto" /> <!-- Right side -->
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Save"
+                        Margin="5,0,0,0"
+                        Command="{Binding   SaveTaskCommand}"
+                        CommandParameter="{Binding}" />
+                <Button Grid.Column="1" Content="Delete Task"
+                        Margin="5,0,0,0"
+                        Command="{Binding DeleteTaskCommand}"
+                        CommandParameter="{Binding}" />
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>
